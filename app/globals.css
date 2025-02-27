@@ -1,0 +1,35 @@
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  /* Импортируем шрифты из папки public */
+  @font-face {
+    font-family: 'Gotham Pro';
+    src: url('/fonts/Gotham_Pro/gothampro.ttf') format('truetype'),
+        url('/fonts/Gotham_Pro/gothampro_black.ttf') format('truetype'),
+        url('/fonts/Gotham_Pro/gothampro_bold.ttf') format('truetype'),
+        url('/fonts/Gotham_Pro/gothampro_light.ttf') format('truetype'),
+        url('/fonts/Gotham_Pro/gothampro_medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Gotham Pro';
+    src: url('/fonts/Gotham_Pro/gothampro_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Gotham Pro';
+    src: url('/fonts/Gotham_Pro/gothampro_light.ttf') format('truetype');
+    font-weight: lighter;
+    font-style: normal;
+  }
+
+  /* Устанавливаем шрифт по умолчанию */
+  body {
+    font-family: 'Gotham Pro', sans-serif;
+    /* Важно: используйте sans-serif как запасной шрифт на случай, если главный не загрузится */
+  }

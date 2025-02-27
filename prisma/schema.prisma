@@ -1,0 +1,62 @@
+  generator nextAdmin {
+    provider = "next-admin-generator-prisma"
+  }
+
+  generator client {
+    provider = "prisma-client-js"
+  }
+
+  model User {
+    id    String  @id @default(auto()) @map("_id") @db.ObjectId
+    email String  @unique
+    name  String?
+  }
+
+model Posts {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  slug        String?  // убрали @unique
+  description String?
+  image       String?
+  category    String?
+  posts2      Posts2[]
+}
+
+model Posts2 {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  slug        String?  // убрали @unique
+  description String?
+  content     String?
+  metadata    String?
+  specs       Json?
+  image       String?
+  postId      String?  @db.ObjectId
+  post        Posts?   @relation(fields: [postId], references: [id])
+  colors      PostsColors[]
+}
+
+model Color {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  image       String?
+  category    String?
+  description String?
+  posts       PostsColors[]
+}
+
+model PostsColors {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  post    Posts2  @relation(fields: [postId], references: [id])
+  postId  String  @db.ObjectId
+  color   Color   @relation(fields: [colorId], references: [id])
+  colorId String  @db.ObjectId
+  order   Int     @default(0)
+
+  @@unique([postId, colorId])
+}
+
+  datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+  }
