@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Угадай мелодию - Игра</title>
+  <!-- Подключение Tailwind CSS через CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 1. Анимированный градиентный фон */
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .bg-animated {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    /* 2. Disco Mode фон (при включённом режиме) */
+    @keyframes disco {
+      0% { background-color: #ff0000; }
+      20% { background-color: #00ff00; }
+      40% { background-color: #0000ff; }
+      60% { background-color: #ffff00; }
+      80% { background-color: #ff00ff; }
+      100% { background-color: #00ffff; }
+    }
+    .disco-mode {
+      animation: disco 0.8s infinite;
+    }
+    /* 3. Анимация обновления счёта с пульсирующей рамкой */
+    .score-update {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .score-update.animate {
+      transform: scale(1.3);
+      box-shadow: 0 0 10px 2px #fff;
+    }
+    /* 4. Медленная анимация вращения */
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin-slow 20s linear infinite;
+    }
+    /* 5. Анимация вращения для диско-шара */
+    @keyframes spin {
+      from { transform: translateX(-50%) rotate(0deg); }
+      to { transform: translateX(-50%) rotate(360deg); }
+    }
+    .disco-ball {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,255,255,0.7);
+      animation: spin 3s linear infinite;
+      z-index: 100;
+      display: none;
+    }
+    /* 6. Конфетти – падающие маленькие квадратики */
+    .confetti-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 90;
+      display: none;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: currentColor;
+      opacity: 0.8;
+      animation: confetti-fall 3s linear infinite;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+    /* 7. Анимация «shake» для нажатия кнопок */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.3s;
+    }
+    /* 8. Эффект ховера для карточек игроков */
+    .player-card:hover {
+      transform: scale(1.02);
+      transition: transform 0.3s ease;
+    }
+    /* 9. Вращающийся полупрозрачный многоугольник на фоне */
+    .rotating-polygon {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.1);
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      animation: polygon-spin 10s linear infinite;
+      z-index: 1;
+    }
+    @keyframes polygon-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    /* 10. Плавающие круги на фоне */
+    .floating-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(20px); }
+    }
+    /* 11. Анимация мерцания (flicker) */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .flicker {
+      animation: flicker 2s infinite;
+    }
+    /* 12. Анимация свечения для заголовка */
+    @keyframes text-glow {
+      from { text-shadow: 0 0 10px #fff; }
+      to { text-shadow: 0 0 20px #ff0, 0 0 30px #f0f, 0 0 40px #0ff; }
+    }
+    .header-effect {
+      animation: text-glow 2s ease-in-out infinite alternate;
+    }
+    /* 13. Дополнительная плавающая иконка музыкальной ноты (с произвольным позиционированием) */
+    .floating-note {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      opacity: 0.8;
+      animation: float 4s ease-in-out infinite;
+    }
+    /* 14. Анимация клика по кнопке – краткое изменение фона */
+    .button-click {
+      animation: button-click 0.3s;
+    }
+    @keyframes button-click {
+      0% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+      100% { filter: brightness(1); }
+    }
+    /* 15. Таймер игры (стиль) */
+    #timer {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      z-index: 110;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    /* Кнопка переключения Disco Mode */
+    #toggleDisco {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 110;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-animated flex flex-col items-center justify-center p-4 relative">
+  <!-- Таймер игры -->
+  <div id="timer">Время: 60</div>
+
+  <!-- Вращающийся многоугольник на фоне -->
+  <div class="rotating-polygon"></div>
+
+  <!-- Плавающие круги на фоне -->
+  <div class="floating-circle" style="width: 100px; height: 100px; top: 80px; left: 10%;"></div>
+  <div class="floating-circle" style="width: 80px; height: 80px; bottom: 50px; right: 15%;"></div>
+  <div class="floating-circle" style="width: 120px; height: 120px; top: 40%; left: 80%;"></div>
+
+  <!-- Кнопка переключения Disco Mode -->
+  <button id="toggleDisco" onclick="toggleDisco()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white shadow-lg transition-transform hover:scale-105">
+    Toggle Disco
+  </button>
+
+  <!-- Диско шар (виден в режиме disco) -->
+  <div class="disco-ball"></div>
+
+  <!-- Контейнер для конфетти (виден в режиме disco) -->
+  <div class="confetti-container" id="confettiContainer"></div>
+
+  <!-- 2. Анимированный заголовок с градиентным текстом и свечением -->
+  <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 mb-8 animate-pulse header-effect">
+    Угадай мелодию
+  </h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl z-10">
+    <!-- Игрок 1 -->
+    <div class="player-card bg-white bg-opacity-20 backdrop-blur-md rounded-xl p-6 shadow-2xl relative overflow-hidden">
+      <!-- Декоративный анимированный круг -->
+      <div class="absolute top-0 left-0 w-16 h-16 bg-pink-300 rounded-full mix-blend-overlay animate-pulse flicker"></div>
+      <!-- Анимированная звезда -->
+      <div class="absolute top-2 right-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.561-.955L10 0l2.951 5.955 6.561.955-4.756 4.635 1.122 6.545z"/>
+        </svg>
+      </div>
+      <div class="flex items-center space-x-4">
+        <!-- Анимированная SVG-иконка игрока -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10 10 0 0112 2a10 10 0 016.879 15.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <h2 class="text-2xl font-semibold text-white">Игрок 1</h2>
+      </div>
+      <div class="mt-4">
+        <div id="score1" class="text-5xl font-bold text-white score-update transition-transform">0</div>
+      </div>
+      <div class="mt-4 flex space-x-4">
+        <!-- Кнопки с эффектом масштабирования, клика (shake) и анимацией нажатия -->
+        <button onclick="updateScore(1, 1, this)" class="px-4 py-2 bg-green-500 hover:bg-green-600 transition-transform transform hover:scale-105 rounded-lg text-white shadow-md">
+          +1
+        </button>
+        <button onclick="updateScore(1, -1, this)" class="px-4 py-2 bg-red-500 hover:bg-red-600 transition-transform transform hover:scale-105 rounded-lg text-white shadow-md">
+          -1
+        </button>
+      </div>
+    </div>
+
+    <!-- Игрок 2 -->
+    <div class="player-card bg-white bg-opacity-20 backdrop-blur-md rounded-xl p-6 shadow-2xl relative overflow-hidden">
+      <!-- Декоративный анимированный круг -->
+      <div class="absolute bottom-0 right-0 w-16 h-16 bg-blue-300 rounded-full mix-blend-overlay animate-pulse flicker"></div>
+      <!-- Анимированная звезда -->
+      <div class="absolute top-2 left-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-300 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.561-.955L10 0l2.951 5.955 6.561.955-4.756 4.635 1.122 6.545z"/>
+        </svg>
+      </div>
+      <div class="flex items-center space-x-4">
+        <!-- Анимированная SVG-иконка игрока -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10 10 0 0112 2a10 10 0 016.879 15.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <h2 class="text-2xl font-semibold text-white">Игрок 2</h2>
+      </div>
+      <div class="mt-4">
+        <div id="score2" class="text-5xl font-bold text-white score-update transition-transform">0</div>
+      </div>
+      <div class="mt-4 flex space-x-4">
+        <button onclick="updateScore(2, 1, this)" class="px-4 py-2 bg-green-500 hover:bg-green-600 transition-transform transform hover:scale-105 rounded-lg text-white shadow-md">
+          +1
+        </button>
+        <button onclick="updateScore(2, -1, this)" class="px-4 py-2 bg-red-500 hover:bg-red-600 transition-transform transform hover:scale-105 rounded-lg text-white shadow-md">
+          -1
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Дополнительная плавающая иконка музыкальной ноты (фиксированная) -->
+  <div class="absolute top-10 right-10 animate-bounce">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13" />
+    </svg>
+  </div>
+
+  <!-- Несколько дополнительных плавающих нот с произвольными позициями -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="floating-note" style="top: 70%; left: 20%;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13" />
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" class="floating-note" style="top: 30%; left: 80%;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13" />
+  </svg>
+
+  <!-- Кнопка сброса очков -->
+  <button onclick="resetScores()" class="mt-8 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 transition-transform transform hover:scale-105 rounded-full text-white shadow-lg">
+    Сбросить очки
+  </button>
+
+  <!-- Элемент аудио для звукового эффекта (используется при обновлении счета) -->
+  <audio id="beep" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+
+  <script>
+    // Инициализация очков и таймера
+    let scores = { 1: 0, 2: 0 };
+    let timeLeft = 60;
+    let timerInterval = setInterval(updateTimer, 1000);
+    let discoOn = false;
+
+    // Обновление счета с эффектами и звуком
+    function updateScore(player, delta, btn) {
+      // Если время вышло, не разрешаем обновление
+      if(timeLeft <= 0) return;
+      scores[player] += delta;
+      const scoreElement = document.getElementById('score' + player);
+      scoreElement.textContent = scores[player];
+      // Добавляем анимацию обновления
+      scoreElement.classList.add('animate');
+      setTimeout(() => scoreElement.classList.remove('animate'), 300);
+      // Добавляем класс shake к кнопке
+      btn.classList.add('shake');
+      setTimeout(() => btn.classList.remove('shake'), 300);
+      // Проигрываем звуковой эффект
+      document.getElementById('beep').play();
+    }
+
+    function resetScores() {
+      scores = { 1: 0, 2: 0 };
+      document.getElementById('score1').textContent = '0';
+      document.getElementById('score2').textContent = '0';
+    }
+
+    // Функция обновления таймера
+    function updateTimer() {
+      if(timeLeft > 0) {
+        timeLeft--;
+        document.getElementById('timer').textContent = "Время: " + timeLeft;
+      } else {
+        clearInterval(timerInterval);
+        document.getElementById('timer').textContent = "Время вышло!";
+      }
+    }
+
+    // Функция переключения режима Disco
+    function toggleDisco() {
+      discoOn = !discoOn;
+      document.body.classList.toggle('disco-mode', discoOn);
+      // Показываем/скрываем диско-шар
+      document.querySelector('.disco-ball').style.display = discoOn ? 'block' : 'none';
+      // Показываем/скрываем конфетти
+      document.getElementById('confettiContainer').style.display = discoOn ? 'block' : 'none';
+      // Если включен Disco, запускаем генерацию конфетти
+      if(discoOn) startConfetti();
+    }
+
+    // Функция генерации конфетти
+    function startConfetti() {
+      const container = document.getElementById('confettiContainer');
+      container.innerHTML = '';
+      const colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+      for(let i = 0; i < 30; i++){
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = -Math.random() * 100 + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(confetti);
+      }
+    }
+  </script>
+</body>
+</html>

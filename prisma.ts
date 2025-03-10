@@ -4,7 +4,9 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const prisma =
   globalForPrisma.prisma ||
-  new PrismaClient();
+  new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'], // Логировать все операции
+  });
 
 export default prisma;
 

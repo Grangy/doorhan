@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import Breadcrumbs from "../../components/Breadcrumbs"; // импортируем
+
 
 function isValidObjectId(id: string) {
   return /^[0-9a-fA-F]{24}$/.test(id);
@@ -57,15 +59,10 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
+        <Breadcrumbs />
+
         <main className="container mx-auto p-4 flex-1 pt-20">
           <article className="max-w-4xl mx-auto">
-            <Link
-              href="/posts"
-              className="text-blue-600 hover:text-blue-800 transition-colors duration-200 mb-4 inline-block"
-            >
-              ← Назад к списку
-            </Link>
-
             {post.image && (
   <div className="relative w-full h-64 mb-6 rounded-lg overflow-hidden">
     <Image
@@ -87,10 +84,11 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
             </header>
 
             {post.description && (
-              <section className="prose max-w-none mb-8">
-                <p className="text-gray-700 text-lg">{post.description}</p>
-              </section>
-            )}
+  <section className="prose max-w-none mb-8">
+    <div dangerouslySetInnerHTML={{ __html: post.description }} />
+  </section>
+)}
+
 
             {post.posts2.length > 0 && (
               <section aria-labelledby="related-posts-heading">
@@ -98,7 +96,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                   id="related-posts-heading"
                   className="text-2xl font-semibold mb-4"
                 >
-                  Связанные материалы
+                  Каталог
                 </h2>
                 <div className="grid gap-4 md:grid-cols-2">
                   {post.posts2.map((post2) => (
@@ -119,7 +117,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
 )}
 
                       <Link
-                        href={`/posts/${slugOrId}/posts2/${post2.id}`} // This is the URL for post2 details page
+                        href={`/posts/${slugOrId}/posts2/${post2.slug || post2.id}`}
                         className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
                       >
                         <h3 className="text-lg font-medium text-gray-800 mb-2">
@@ -127,10 +125,12 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                         </h3>
                       </Link>
                       {post2.description && (
-                        <p className="text-gray-600 line-clamp-3">
-                          {post2.description}
-                        </p>
-                      )}
+  <div
+    className="text-gray-600 line-clamp-3"
+    dangerouslySetInnerHTML={{ __html: post2.description }}
+  />
+)}
+
                     </div>
                   ))}
                 </div>

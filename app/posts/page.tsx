@@ -3,6 +3,8 @@
     import Header from "../components/Header/Header";
     import Footer from "../components/Footer/Footer";
     import Image from "next/image";
+    import Breadcrumbs from "../components/Breadcrumbs"; // импортируем компонент
+
 
     export default async function PostsPage() {
     // Получаем все посты из базы данных
@@ -12,6 +14,7 @@
         <>
         {/* Шапка сайта */}
         <Header />
+        <Breadcrumbs />
 
         <main className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-8 text-center">Все посты</h1>

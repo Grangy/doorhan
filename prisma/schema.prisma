@@ -1,21 +1,26 @@
-  generator nextAdmin {
-    provider = "next-admin-generator-prisma"
-  }
+generator nextAdmin {
+  provider = "next-admin-generator-prisma"
+}
 
-  generator client {
-    provider = "prisma-client-js"
-  }
+generator client {
+  provider = "prisma-client-js"
+}
 
-  model User {
-    id    String  @id @default(auto()) @map("_id") @db.ObjectId
-    email String  @unique
-    name  String?
-  }
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  email String  @unique
+  name  String?
+}
 
 model Posts {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String?
-  slug        String?  // убрали @unique
+  slug        String?
   description String?
   image       String?
   category    String?
@@ -23,17 +28,29 @@ model Posts {
 }
 
 model Posts2 {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String?
-  slug        String?  // убрали @unique
-  description String?
-  content     String?
-  metadata    String?
-  specs       Json?
-  image       String?
-  postId      String?  @db.ObjectId
-  post        Posts?   @relation(fields: [postId], references: [id])
-  colors      PostsColors[]
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  slug         String?
+  description  String?
+  content      String?
+  metadata     String?
+  specs        Json?
+  image        String?
+  postId       String?       @db.ObjectId
+  post         Posts?        @relation(fields: [postId], references: [id])
+  sliderPhotos SliderPhotos[]
+  colors       ColorPosts2[]
+  pdfs         Pdf[]
+  advantages AdvantagePosts2[]
+}
+
+model SliderPhotos {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  image     String
+  order     Int     @default(0)
+  posts2Id  String  @db.ObjectId
+  posts2    Posts2  @relation(fields: [posts2Id], references: [id])
 }
 
 model Color {
@@ -42,21 +59,44 @@ model Color {
   image       String?
   category    String?
   description String?
-  posts       PostsColors[]
+  posts2      ColorPosts2[]
 }
 
-model PostsColors {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  post    Posts2  @relation(fields: [postId], references: [id])
-  postId  String  @db.ObjectId
-  color   Color   @relation(fields: [colorId], references: [id])
-  colorId String  @db.ObjectId
-  order   Int     @default(0)
+model ColorPosts2 {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  color    Color   @relation(fields: [colorId], references: [id])
+  colorId  String  @db.ObjectId
+  posts2   Posts2  @relation(fields: [posts2Id], references: [id])
+  posts2Id String  @db.ObjectId
 
-  @@unique([postId, colorId])
+  @@unique([colorId, posts2Id])
+  @@index([colorId])
+  @@index([posts2Id])
 }
 
-  datasource db {
-    provider = "mongodb"
-    url      = env("DATABASE_URL")
-  }
+model Pdf {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  fileUrl  String
+  posts2Id String   @db.ObjectId
+  posts2   Posts2   @relation(fields: [posts2Id], references: [id])
+}
+
+// Новая модель для преимуществ
+model Advantage {
+  id              String              @id @default(auto()) @map("_id") @db.ObjectId
+  image           String
+  text            String
+  order           Int                 @default(0)
+  advantagePosts  AdvantagePosts2[]
+}
+
+model AdvantagePosts2 {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  advantage  Advantage @relation(fields: [advantageId], references: [id])
+  advantageId String    @db.ObjectId
+  posts2     Posts2    @relation(fields: [posts2Id], references: [id])
+  posts2Id   String    @db.ObjectId
+
+  @@unique([advantageId, posts2Id])
+}

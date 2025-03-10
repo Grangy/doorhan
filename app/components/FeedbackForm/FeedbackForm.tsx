@@ -4,10 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { HiX, HiCheckCircle, HiExclamationCircle } from 'react-icons/hi';
 
 export default function FeedbackForm({ onClose }: { onClose: () => void }) {
-  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -35,9 +32,7 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!name.trim()) newErrors.name = 'Введите имя';
-    if (!phone.trim()) newErrors.phone = 'Введите телефон';
-    if (email && !/^\S+@\S+\.\S+$/.test(email)) newErrors.email = 'Неверный формат email';
+    if (!phone.trim()) newErrors.phone = 'Введите номер телефона';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,18 +40,32 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-  
+
     setIsSubmitting(true);
     try {
-      // Здесь будет запрос к API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setIsSuccess(true);
-      setTimeout(() => {
-        setIsSuccess(false);
-        onClose();
-      }, 2000);
-    } catch (error) {
-      console.error('Ошибка отправки формы:', error);  // <-- Исправление здесь
+      const payload = {
+        phone,
+        page: window.location.href,
+      };
+
+      // Отправляем данные на API endpoint /api/forms
+      const response = await fetch('/api/forms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+          onClose();
+        }, 2000);
+      } else {
+        setErrors({ form: 'Ошибка отправки. Попробуйте позже.' });
+      }
+    } catch {
+      console.error('Ошибка отправки формы');
       setErrors({ form: 'Ошибка отправки. Попробуйте позже.' });
     } finally {
       setIsSubmitting(false);
@@ -89,24 +98,6 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Имя *</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                  autoFocus
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-sm mt-1 flex items-center">
-                    <HiExclamationCircle className="w-4 h-4 mr-1" /> {errors.name}
-                  </p>
-                )}
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium mb-1">Телефон *</label>
                 <input
                   type="tel"
@@ -115,39 +106,13 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
                   className={`w-full px-4 py-2 border rounded-lg ${
                     errors.phone ? 'border-red-500' : 'border-gray-300'
                   } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                  autoFocus
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-sm mt-1 flex items-center">
                     <HiExclamationCircle className="w-4 h-4 mr-1" /> {errors.phone}
                   </p>
                 )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full px-4 py-2 border rounded-lg ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1 flex items-center">
-                    <HiExclamationCircle className="w-4 h-4 mr-1" /> {errors.email}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Сообщение</label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
-                />
               </div>
 
               {errors.form && (
@@ -159,7 +124,7 @@ export default function FeedbackForm({ onClose }: { onClose: () => void }) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-main-doorhan text-white py-3 rounded-lg hover:bg-blue-700 
+                className="w-full bg-sky-900 text-white py-3 rounded-lg hover:bg-blue-700 
                          transition-colors flex items-center justify-center"
               >
                 {isSubmitting ? (

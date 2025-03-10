@@ -12,7 +12,7 @@ export default function NavMenu() {
       <Link href="/services" className="text-white hover:text-blue-600 transition">
         Услуги
       </Link>
-      <Link href="/contacts" className="text-white hover:text-blue-600 transition">
+      <Link href="/contact" className="text-white hover:text-blue-600 transition">
         Контакты
       </Link>
     </nav>

@@ -16,19 +16,32 @@ export default async function Home() {
           <div className="flex flex-col md:flex-row items-center min-h-[80vh]">
             {/* Левая часть */}
             <div className="md:w-1/2 p-8 space-y-6 lg:pl-12 xl:pl-24">
-              <h1 className="text-5xl/none lg:text-6xl/none font-bold text-gray-900 bg-gradient-to-r from-main-doorhan to-purple-600 bg-clip-text text-transparent">
-                Открываем будущее уже 30 лет!
+              <h1 className="text-5xl/none lg:text-6xl/none font-bold bg-gradient-to-r  bg-purple-600 to-sky-600  bg-clip-text text-transparent">
+                На пути к мечте
               </h1>
               <p className="text-lg text-gray-600 max-w-xl">
-                Исследуйте уникальные решения и инновационные подходы на рынке автоматизации ворот
+                Исследуйте уникальные решения и инновационные подходы на рынке
+                автоматизации ворот
               </p>
-              <button className="relative inline-flex items-center px-8 py-4 overflow-hidden text-lg font-medium text-white transition-all duration-500 bg-main-doorhan rounded-lg hover:bg-blue-700 group hover:scale-[1.02]">
-                <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-64 group-hover:h-64 opacity-10"></span>
-                <span className="relative">Начать путешествие</span>
-                <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-              </button>
+              <Link href="/posts" passHref>
+                <button className="relative mt-4 inline-flex items-center px-8 py-4 overflow-hidden text-lg font-medium text-white transition-all duration-500 bg-gradient-to-r  bg-purple-600 to-sky-600 rounded-lg hover:bg-blue-700 group hover:scale-[1.02]">
+                  <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-64 group-hover:h-64 opacity-10"></span>
+                  <span className="relative">Начать путешествие</span>
+                  <svg
+                    className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    ></path>
+                  </svg>
+                </button>
+              </Link>
             </div>
 
             {/* Правая часть с видео */}

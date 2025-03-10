@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"telegramId":{"$numberInt":"1"}},"name":"User_telegramId_key","unique":true}],"uuid":"f6399fb0749b40f1b8ebcee66e60d7dd","collectionName":"User","type":"collection"}
