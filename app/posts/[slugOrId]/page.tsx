@@ -102,17 +102,22 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                       className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                     >
                       {post2.image && (
-                        <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
-                          <Image
-                            src={`${post2.image}?t=${Date.now()}`}
-                            alt={post2.name || "Изображение связанного поста"}
-                            fill
-                            className="object-contain"
-                            sizes="(max-width: 768px) 100vw, 30vw"
-                          />
-                        </div>
+                        <Link
+                          href={`/posts/${slugOrId}/posts2/${
+                            post2.slug || post2.id
+                          }`}
+                        >
+                          <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
+                            <Image
+                              src={`${post2.image}?t=${Date.now()}`}
+                              alt={post2.name || "Изображение связанного поста"}
+                              fill
+                              className="object-contain"
+                              sizes="(max-width: 768px) 100vw, 30vw"
+                            />
+                          </div>
+                        </Link>
                       )}
-
                       <Link
                         href={`/posts/${slugOrId}/posts2/${
                           post2.slug || post2.id
@@ -123,6 +128,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                           {post2.name}
                         </h3>
                       </Link>
+
                       {post2.description && (
                         <div
                           className="text-gray-600 line-clamp-3"
