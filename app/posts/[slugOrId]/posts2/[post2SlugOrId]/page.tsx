@@ -15,10 +15,38 @@ function isValidObjectId(id: string) {
   return /^[0-9a-fA-F]{24}$/.test(id);
 }
 
+// Функция generateMetadata для динамической генерации метаданных
+export async function generateMetadata({ params }: PageProps) {
+  const { post2SlugOrId } = await params;
+  const whereCondition = isValidObjectId(post2SlugOrId)
+    ? { id: post2SlugOrId }
+    : { slug: post2SlugOrId };
+
+  // Получаем только необходимые поля для метаданных
+  const post2 = await prisma.posts2.findFirst({
+    where: whereCondition,
+    select: {
+      name: true,
+      description: true,
+    },
+  });
+
+  if (!post2) {
+    return {
+      title: "Not Found",
+      description: "",
+    };
+  }
+
+  return {
+    title: post2.name,
+    description: post2.description,
+  };
+}
+
 export default async function Post2DetailPage({ params }: PageProps) {
   const { post2SlugOrId } = await params;
 
-  // Если значение является валидным ObjectId – ищем по id, иначе по slug
   const whereCondition = isValidObjectId(post2SlugOrId)
     ? { id: post2SlugOrId }
     : { slug: post2SlugOrId };
@@ -30,7 +58,6 @@ export default async function Post2DetailPage({ params }: PageProps) {
       colors: { include: { color: true } },
       sliderPhotos: true,
       pdfs: true,
-      // Включаем связь через join-таблицу: advantagePosts, внутри которой получаем объект advantage
       advantages: {
         include: { advantage: true },
       },
@@ -39,12 +66,10 @@ export default async function Post2DetailPage({ params }: PageProps) {
     
   if (!post2) return notFound();
 
-  // Преобразуем post2.specs в Spec[] если это массив, иначе используем пустой массив.
   const specs: Spec[] = Array.isArray(post2.specs)
     ? (post2.specs as unknown as Spec[])
     : [];
 
-  // Преобразуем преимущества из join-таблицы в простой массив преимуществ
   const advantages = post2.advantages.map((ap) => ap.advantage);
 
   const formattedPost2: Post2Type = {

@@ -6,6 +6,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Breadcrumbs from "../../components/Breadcrumbs"; // импортируем
 
+
 function isValidObjectId(id: string) {
   return /^[0-9a-fA-F]{24}$/.test(id);
 }
