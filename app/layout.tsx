@@ -4,7 +4,7 @@
 
   export function generateMetadata(): Metadata {
     return {
-      title: 'Doorhan - автоматические ворота и системы',
+      title: 'Doorhan - автоматические ворота и системы в Симферополе и Крыму',
       description: 'Профессиональная установка и обслуживание автоматических ворот Doorhan',
     };
   }

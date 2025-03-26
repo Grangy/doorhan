@@ -1,4 +1,4 @@
-import prisma from "../../../../../prisma";
+import prisma from "../../../../prisma";
 import { notFound } from "next/navigation";
 import Post2DetailClient, { Post2Type, Spec } from "./Post2DetailClient";
 

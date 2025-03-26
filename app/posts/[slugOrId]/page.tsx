@@ -104,7 +104,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                     >
                       {post2.image && (
                         <Link
-                          href={`/posts/${slugOrId}/posts2/${
+                          href={`/posts/${slugOrId}$/{
                             post2.slug || post2.id
                           }`}
                         >
@@ -120,7 +120,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                         </Link>
                       )}
                       <Link
-                        href={`/posts/${slugOrId}/posts2/${
+                        href={`/posts/${slugOrId}/${
                           post2.slug || post2.id
                         }`}
                         className="text-blue-600 hover:text-blue-800 transition-colors duration-200"

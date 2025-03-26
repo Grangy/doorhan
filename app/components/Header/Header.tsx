@@ -8,6 +8,7 @@ import { RiProductHuntLine, RiContactsLine } from 'react-icons/ri';
 import Image from 'next/image';
 import FeedbackForm from '../FeedbackForm/FeedbackForm';
 
+
 const SHOW_ICONS = false;
 
 export default function Header() {

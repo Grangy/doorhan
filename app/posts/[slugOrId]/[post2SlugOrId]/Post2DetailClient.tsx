@@ -4,11 +4,11 @@ import React, { forwardRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify";
-import Header from "../../../../components/Header/Header";
-import Footer from "../../../../components/Footer/Footer";
-import HowWeWork from "../../../../components/HowWeWork";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import ContactForm from "../../../../components/ContactForm";
+import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/Footer";
+import HowWeWork from "../../../components/HowWeWork";
+import Breadcrumbs from "../../../components/Breadcrumbs";
+import ContactForm from "../../../components/ContactForm";
 
 
 export type Spec = {
@@ -194,7 +194,7 @@ const ParentPostSection = ({ post }: { post: Post2Type["post"] }) => {
       </h2>
       <div className="inline-block">
         <Link
-          href={`/posts/${post.id}`}
+          href={`/posts/${post.slug}`}
           className="inline-flex items-center text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-300"
           aria-label={`Перейти к родительскому посту: ${
             post.name || "Без названия"
