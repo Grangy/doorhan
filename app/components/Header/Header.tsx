@@ -43,9 +43,9 @@ export default function Header() {
               <Image
                 src="/img/logo/logo.png"
                 alt="Логотип"
-                width={175}
-                height={40}
-                className="w-[132px] md:w-[180px] h-[18px] md:h-[25px]"
+                width={195}
+                height={38}
+                className="w-[132px] md:w-[190px] h-[18px] md:h-[22px]"
                 priority
               />
             </Link>
