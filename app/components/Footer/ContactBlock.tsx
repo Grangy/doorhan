@@ -3,10 +3,10 @@ export default function ContactBlock() {
       <div className="mb-8">
         <h4 className="text-lg font-semibold mb-4">Контакты</h4>
         <ul className="space-y-2 text-gray-400">
-          <li>Адрес: г. Москва, ул. Примерная, 15</li>
-          <li>Телефон: +7 (495) 123-45-67</li>
-          <li>Email: info@doorhan.ru</li>
-          <li>Режим работы: Пн-Пт 9:00-20:00</li>
+          <li>ул. Маршала Советского Союза Буденного С.М., 32И, Симферопольэтаж 5, офис 103</li>
+          <li>Телефон: +7 (928) 274-64-68</li>
+          <li>Email: info@doorhan-crimea.com</li>
+          <li>Режим работы: Пн-Пт 9:00-18:00</li>
         </ul>
       </div>
     );
