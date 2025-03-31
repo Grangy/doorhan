@@ -81,7 +81,7 @@ export default function Header() {
                   />
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-white">+7 (928) 274-64-68</p>
+                <p className="text-sm font-semibold text-white">+7(978) 78 22 479</p>
                 <p className="text-xs text-gray-200">Ежедневно 9:00 - 18:00</p>
               </div>
             </div>
