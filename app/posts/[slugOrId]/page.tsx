@@ -104,9 +104,9 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                     >
                       {post2.image && (
                         <Link
-                          href={`/posts/${slugOrId}$/{
-                            post2.slug || post2.id
-                          }`}
+                        href={`/posts/${slugOrId}/${
+                          post2.slug || post2.id
+                        }`}
                         >
                           <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
                             <Image
