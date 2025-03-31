@@ -18,7 +18,7 @@ export default async function Home() {
             {/* Левая часть */}
             <div className="md:w-1/2 p-8 space-y-6 lg:pl-12 xl:pl-24">
               <h1 className="text-5xl/none lg:text-6xl/none font-bold bg-gradient-to-r  bg-purple-600 to-sky-600  bg-clip-text text-transparent">
-                На пути к мечте
+                Технологично
               </h1>
               <p className="text-lg text-gray-600 max-w-xl">
                 Исследуйте уникальные решения и инновационные подходы на рынке
