@@ -64,13 +64,13 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
         <main className="container mx-auto p-4 flex-1 pt-20">
           <article className="max-w-4xl mx-auto">
             {post.image && (
-              <div className="relative w-full h-64 mb-6 rounded-lg overflow-hidden">
+              <div className="relative mb-8 overflow-hidden rounded-2xl shadow-xl transition-shadow duration-300 h-[60vh] cursor-pointer">
                 <Image
                   src={`${post.image}?t=${Date.now()}`}
                   alt={post.name || "Изображение поста"}
                   fill
                   className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 60vw"
+                  sizes="(max-width: 768px) 100vw, 80vw"
                   priority
                 />
               </div>
