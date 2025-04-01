@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HiMenu, HiX, HiPhone, HiSearch } from 'react-icons/hi';
+import { HiMenu, HiX, HiPhone } from 'react-icons/hi';
 import { RiProductHuntLine, RiContactsLine } from 'react-icons/ri';
 import Image from 'next/image';
 import FeedbackForm from '../FeedbackForm/FeedbackForm';
+import LiveSearch from "../LiveSearch/LiveSearch"; // импортируем новый компонент
+
 
 
 const SHOW_ICONS = false;
@@ -72,26 +74,20 @@ export default function Header() {
           {/* Контактная информация и поиск */}
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex items-center gap-4">
-              <div className="relative">
-                <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white" />
-                <input
-                  type="text"
-                  placeholder="Поиск..."
-                  className="pl-10 pr-4 py-2 w-48 border border-white placeholder:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-              </div>
+            <LiveSearch />
+
               <div className="text-right">
                 <p className="text-sm font-semibold text-white">+7 978 263‑95‑21</p>
                 <p className="text-xs text-gray-200">Ежедневно 9:00 - 18:00</p>
               </div>
             </div>
             <button
-              onClick={() => setIsPopupOpen(true)}
-              className="bg-white text-main-doorhan px-6 py-2 rounded-lg hover:bg-gray-200 transition flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
-            >
-              <HiPhone className="w-5 h-5" />
-              <span>Заказать</span>
-            </button>
+    onClick={() => setIsPopupOpen(true)}
+    className="bg-white text-main-doorhan px-6 py-2 rounded-lg hover:bg-gray-200 transition flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
+  >
+    <HiPhone className="w-5 h-5" />
+    <span>Заказать</span>
+  </button>
           </div>
 
           {/* Мобильное меню */}
