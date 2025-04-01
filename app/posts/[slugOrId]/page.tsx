@@ -7,8 +7,6 @@ import Footer from "../../components/Footer/Footer";
 import Breadcrumbs from "../../components/Breadcrumbs"; // импортируем
 import ContactForm from "../../components/ContactForm";
 
-
-
 function isValidObjectId(id: string) {
   return /^[0-9a-fA-F]{24}$/.test(id);
 }
@@ -106,9 +104,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                     >
                       {post2.image && (
                         <Link
-                        href={`/posts/${slugOrId}/${
-                          post2.slug || post2.id
-                        }`}
+                          href={`/posts/${slugOrId}/${post2.slug || post2.id}`}
                         >
                           <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
                             <Image
@@ -122,9 +118,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                         </Link>
                       )}
                       <Link
-                        href={`/posts/${slugOrId}/${
-                          post2.slug || post2.id
-                        }`}
+                        href={`/posts/${slugOrId}/${post2.slug || post2.id}`}
                         className="text-sky-900 hover:text-blue-800 transition-colors duration-200"
                       >
                         <h3 className="text-lg font-medium text-gray-800 mb-2">
@@ -143,10 +137,9 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                     </div>
                   ))}
                 </div>
-                <ContactForm />
-
               </section>
             )}
+            <ContactForm />
           </article>
         </main>
         <Footer />
