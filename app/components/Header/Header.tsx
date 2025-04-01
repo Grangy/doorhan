@@ -9,8 +9,6 @@ import Image from 'next/image';
 import FeedbackForm from '../FeedbackForm/FeedbackForm';
 import LiveSearch from "../LiveSearch/LiveSearch"; // импортируем новый компонент
 
-
-
 const SHOW_ICONS = false;
 
 export default function Header() {
@@ -74,20 +72,19 @@ export default function Header() {
           {/* Контактная информация и поиск */}
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex items-center gap-4">
-            <LiveSearch />
-
+              <LiveSearch />
               <div className="text-right">
                 <p className="text-sm font-semibold text-white">+7 978 263‑95‑21</p>
                 <p className="text-xs text-gray-200">Ежедневно 9:00 - 18:00</p>
               </div>
             </div>
             <button
-    onClick={() => setIsPopupOpen(true)}
-    className="bg-white text-main-doorhan px-6 py-2 rounded-lg hover:bg-gray-200 transition flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
-  >
-    <HiPhone className="w-5 h-5" />
-    <span>Заказать</span>
-  </button>
+              onClick={() => setIsPopupOpen(true)}
+              className="bg-white text-main-doorhan px-6 py-2 rounded-lg hover:bg-gray-200 transition flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
+            >
+              <HiPhone className="w-5 h-5" />
+              <span>Заказать</span>
+            </button>
           </div>
 
           {/* Мобильное меню */}
@@ -127,17 +124,14 @@ export default function Header() {
 
                 <div className="mt-8 pt-6 border-t">
                   <div className="flex flex-col gap-4">
-                    <input
-                      type="text"
-                      placeholder="Поиск..."
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    {/* Используем LiveSearch в мобильном меню */}
+                    <LiveSearch />
                     <div className="text-white">
                       <p className="font-medium flex items-center gap-2">
                         <HiPhone className="w-5 h-5" />
-                        +7 (495) 123-45-67
+                        +7 978 263‑95‑21
                       </p>
-                      <p className="text-sm mt-1">Ежедневно 9:00 - 20:00</p>
+                      <p className="text-sm mt-1">Ежедневно 9:00 - 18:00</p>
                     </div>
                     <button
                       onClick={() => {
