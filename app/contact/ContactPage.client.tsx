@@ -59,7 +59,7 @@ export default function ContactPage() {
           <div className="flex-1 bg-white p-6 rounded-lg shadow-md hover:scale-105 transition-transform">
             <h2 className="text-2xl font-semibold mb-4 text-main-doorhan">Контактная информация</h2>
             <p className="mb-2"><strong>Телефон:</strong> +7 978 263‑95‑21</p>
-            <p className="mb-2"><strong>Адрес:</strong> ул. Маршала Советского Союза Буденного С.М., 32И, Симферополь, этаж 5</p>
+            <p className="mb-2"><strong>Адрес:</strong> ул. Маршала Советского Союза Буденного С.М., 32И, Симферополь, Республика Крым, этаж 5</p>
           </div>
 
           {/* Форма обратной связи */}
