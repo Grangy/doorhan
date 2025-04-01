@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /.next/
+Disallow: /api/ # Если у вас есть API-эндпоинты, которые не должны индексироваться
+Allow: /
+
+Sitemap: https://doorhan-crimea.com/sitemap.xml # Замените yourdomain.com на ваш домен
