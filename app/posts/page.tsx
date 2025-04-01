@@ -61,7 +61,7 @@ export default async function PostsPage() {
       <span className="text-gray-500">Нет изображения</span>
     </div>
   )}
-  <h2 className="text-xl font-semibold text-blue-600 mb-2">
+  <h2 className="text-xl font-semibold text-blue-800 mb-2">
     {post.name || "Без названия"}
   </h2>
   <p className="text-gray-600 mt-2 line-clamp-3">

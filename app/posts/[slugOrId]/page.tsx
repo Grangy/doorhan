@@ -123,7 +123,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                         href={`/posts/${slugOrId}/${
                           post2.slug || post2.id
                         }`}
-                        className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                        className="bg-sky-900 hover:text-blue-800 transition-colors duration-200"
                       >
                         <h3 className="text-lg font-medium text-gray-800 mb-2">
                           {post2.name}
