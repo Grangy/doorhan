@@ -3,6 +3,8 @@ import Footer from "./components/Footer/Footer";
 import prisma from "../prisma";
 import Image from "next/image";
 import Link from "next/link";
+import ContactForm from "./components/ContactForm";
+
 
 
 export default async function Home() {
@@ -89,6 +91,8 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+        <ContactForm />
+
       </main>
       <Footer />
     </>
