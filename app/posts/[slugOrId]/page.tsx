@@ -5,6 +5,8 @@ import Image from "next/image";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Breadcrumbs from "../../components/Breadcrumbs"; // импортируем
+import ContactForm from "../../components/ContactForm";
+
 
 
 function isValidObjectId(id: string) {
@@ -141,6 +143,8 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                     </div>
                   ))}
                 </div>
+                <ContactForm />
+
               </section>
             )}
           </article>
