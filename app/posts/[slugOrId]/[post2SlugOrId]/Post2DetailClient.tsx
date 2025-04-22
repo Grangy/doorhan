@@ -102,15 +102,6 @@ const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, alt, onClose }) => {
   );
 };
 
-/** Ссылка "Skip to content" для улучшения доступности */
-const SkipToContent = () => (
-  <a
-    href="#main-content"
-    className="absolute top-0 left-0 m-4 p-2 bg-blue-600 text-white rounded transform -translate-y-full focus:translate-y-0 transition-transform duration-300 z-50"
-  >
-    Перейти к содержимому
-  </a>
-);
 
 
 /** Секция с техническими характеристиками */
@@ -367,7 +358,6 @@ const Post2DetailClient = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div ref={ref}>
-        <SkipToContent />
         <Header />
         <Breadcrumbs />
 
