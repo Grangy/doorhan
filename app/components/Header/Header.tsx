@@ -40,15 +40,20 @@ export default function Header() {
               <HiMenu className="w-6 h-6 text-white" />
             </button>
             <Link href="/" className="flex items-center">
-              <Image
-                src="/img/logo/logo2.png"
-                alt="Логотип"
-                width={195}
-                height={38}
-                className="w-[132px] md:w-[190px] h-[18px] md:h-[22px]"
-                priority
-              />
-            </Link>
+  <div className="relative" style={{ 
+    width: 'auto', 
+    height: '25px', // или любая другая фиксированная высота
+    aspectRatio: '195/38' // соотношение ширины к высоте вашего лого
+  }}>
+    <Image
+      src="/img/logo/logo2.png"
+      alt="Логотип"
+      fill
+      className="object-contain"
+      priority
+    />
+  </div>
+</Link>
           </div>
 
           {/* Десктопное меню */}

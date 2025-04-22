@@ -21,11 +21,10 @@ export default function Breadcrumbs() {
     const pathCrumbs: Crumb[] = [{ name: 'Главная', href: '/' }];
 
     if (segments[0] === 'posts') {
-      // Второй уровень — базовая категория "Продукция"
+      // Существующая логика для постов остается без изменений
       pathCrumbs.push({ name: 'Продукция', href: '/posts' });
 
       if (segments.length === 2) {
-        // URL вида: /posts/{postSlug} – страница родительского поста
         const postSlug = segments[1];
         fetch(`/api/posts?slug=${postSlug}`)
           .then((res) => res.json())
@@ -40,11 +39,8 @@ export default function Breadcrumbs() {
           })
           .catch(() => setCrumbs(pathCrumbs));
       } else if (segments.length === 3) {
-        // URL вида: /posts/{parentSlug}/{childSlug} – страница дочернего поста
         const parentSlug = segments[1];
         const childSlug = segments[2];
-
-        // Сначала запрашиваем данные родительского поста (для получения категории или названия)
         fetch(`/api/posts?slug=${parentSlug}`)
           .then((res) => res.json())
           .then((parentPost) => {
@@ -59,7 +55,6 @@ export default function Breadcrumbs() {
                 href: `/posts/${parentSlug}`,
               });
             }
-            // Затем запрашиваем данные дочернего поста
             fetch(`/api/posts2?slug=${childSlug}`)
               .then((res) => res.json())
               .then((child) => {
@@ -78,9 +73,9 @@ export default function Breadcrumbs() {
         setCrumbs(pathCrumbs);
       }
     } else {
-      // Общая логика для других страниц
+      // Общая логика для других страниц с исключением для /contact
       const dynamicCrumbs = segments.map((seg, i) => ({
-        name: seg,
+        name: seg === 'contact' ? 'Контакты' : seg, // Заменяем 'contact' на 'Контакты'
         href: '/' + segments.slice(0, i + 1).join('/'),
       }));
       setCrumbs([{ name: 'Главная', href: '/' }, ...dynamicCrumbs]);
