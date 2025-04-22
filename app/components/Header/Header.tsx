@@ -41,7 +41,7 @@ export default function Header() {
             </button>
             <Link href="/" className="flex items-center">
               <Image
-                src="/img/logo/logo.png"
+                src="/img/logo/logo2.png"
                 alt="Логотип"
                 width={195}
                 height={38}
