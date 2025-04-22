@@ -91,7 +91,7 @@ export default function Header() {
           {isMenuOpen && (
             <div className="fixed inset-0 bg-black/50 md:hidden z-50" onClick={() => setIsMenuOpen(false)}>
               <div
-                className="absolute top-0 left-0 w-3/4 h-full bg-blue-600 shadow-xl p-4 transform transition-transform duration-300"
+                className="absolute top-0 left-0 w-3/4 h-full bg-sky-900 shadow-xl p-4 transform transition-transform duration-300"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex justify-between items-center mb-8">
@@ -112,7 +112,7 @@ export default function Header() {
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
                         pathname === link.href
-                          ? 'bg-blue-50 text-blue-600'
+                          ? 'bg-blue-50 text-sky-900'
                           : 'text-white hover:bg-gray-100'
                       }`}
                     >
@@ -138,7 +138,7 @@ export default function Header() {
                         setIsPopupOpen(true);
                         setIsMenuOpen(false);
                       }}
-                      className="w-full bg-white text-blue-600 py-3 rounded-lg hover:bg-gray-100 transition shadow-md hover:shadow-lg active:scale-95"
+                      className="w-full bg-white text-sky-900 py-3 rounded-lg hover:bg-gray-100 transition shadow-md hover:shadow-lg active:scale-95"
                     >
                       Заказать
                     </button>
