@@ -296,6 +296,76 @@ const options: NextAdminOptions = {
         },
       },
     },
+    Blog: {
+      toString: (blog) => `${blog.title}`,
+      title: "Блог",
+      icon: "NewspaperIcon",
+      list: {
+        display: ["id", "title", "slug", "excerpt", "coverImage", "publishedAt"], // ← Добавлено
+        search: ["title", "slug", "excerpt"],
+        filters: [
+          {
+            name: "Опубликовано после 2024",
+            value: {
+              publishedAt: {
+                gte: new Date("2024-01-01").toISOString(),
+              },
+            },
+          },
+        ],
+        fields: {
+          coverImage: {
+            formatter: (url) =>
+              url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={url} alt="cover" className="w-16 h-16 object-cover rounded" />
+              ) : (
+                <span>Нет изображения</span>
+              ),
+          },
+        },
+      },
+      edit: {
+        display: ["title", "slug", "excerpt", "coverImage", "content", "publishedAt"], // ← Добавлено
+        fields: {
+          content: {
+            format: "richtext-html",
+          },
+          publishedAt: {
+            format: "date-time",
+          },
+          coverImage: {
+            format: "file",
+            handler: {
+              upload: async (buffer, infos) => {
+                const formData = new FormData();
+                const fileName = infos?.name || "default_filename";
+                formData.append("file", new Blob([buffer]), fileName);
+                const res = await fetch("http://127.0.0.1:3000/api/upload", {
+                  method: "POST",
+                  body: formData,
+                });
+                if (!res.ok) throw new Error("Ошибка загрузки файла");
+                const data = await res.json();
+                return data.url;
+              },
+              delete: async (url) => {
+                const res = await fetch("http://127.0.0.1:3000/api/upload", {
+                  method: "DELETE",
+                  body: JSON.stringify({ url }),
+                  headers: { "Content-Type": "application/json" },
+                });
+                if (!res.ok) throw new Error("Ошибка при удалении файла");
+                return true;
+              },
+            },
+          },
+        },
+      },
+    },
+    
+    
+    
   },
 };
 

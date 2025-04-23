@@ -100,3 +100,15 @@ model AdvantagePosts2 {
 
   @@unique([advantageId, posts2Id])
 }
+
+model Blog {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  slug         String   @unique
+  excerpt      String?
+  coverImage   String?  // ← Добавлено поле для картинки
+  content      String
+  publishedAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

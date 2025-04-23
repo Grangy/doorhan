@@ -17,11 +17,10 @@ export default function Breadcrumbs() {
     if (!pathname) return;
 
     const segments = pathname.split('/').filter(Boolean);
-    // Начинаем всегда с "Главная"
     const pathCrumbs: Crumb[] = [{ name: 'Главная', href: '/' }];
 
+    // === Обработка маршрута "/posts" ===
     if (segments[0] === 'posts') {
-      // Существующая логика для постов остается без изменений
       pathCrumbs.push({ name: 'Продукция', href: '/posts' });
 
       if (segments.length === 2) {
@@ -72,10 +71,33 @@ export default function Breadcrumbs() {
       } else {
         setCrumbs(pathCrumbs);
       }
+
+    // === Обработка маршрута "/blogs" ===
+    } else if (segments[0] === 'blogs') {
+      pathCrumbs.push({ name: 'Блог', href: '/blogs' });
+
+      if (segments.length === 2) {
+        const blogSlug = segments[1];
+        fetch(`/api/blogs?slug=${blogSlug}`)
+          .then((res) => res.json())
+          .then((blog) => {
+            if (blog && blog.title) {
+              pathCrumbs.push({
+                name: blog.title,
+                href: `/blogs/${blog.slug || blog.id}`,
+              });
+            }
+            setCrumbs(pathCrumbs);
+          })
+          .catch(() => setCrumbs(pathCrumbs));
+      } else {
+        setCrumbs(pathCrumbs);
+      }
+
+    // === Общая логика для остальных страниц ===
     } else {
-      // Общая логика для других страниц с исключением для /contact
       const dynamicCrumbs = segments.map((seg, i) => ({
-        name: seg === 'contact' ? 'Контакты' : seg, // Заменяем 'contact' на 'Контакты'
+        name: seg === 'contact' ? 'Контакты' : seg,
         href: '/' + segments.slice(0, i + 1).join('/'),
       }));
       setCrumbs([{ name: 'Главная', href: '/' }, ...dynamicCrumbs]);
