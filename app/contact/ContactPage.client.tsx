@@ -109,14 +109,7 @@ export default function ContactPage() {
         {/* Карта */}
         <div className="mt-10">
           <h2 className="text-2xl font-semibold mb-4 text-main-doorhan">Мы на карте</h2>
-          <iframe
-            src="https://yandex.ru/map-widget/v1/-/CBucU6V~8B"
-            width="100%"
-            height="400"
-            frameBorder="0"
-            allowFullScreen
-            className="rounded-lg shadow-md border-2 border-main-doorhan hover:scale-105 transition-transform"
-          />
+          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ca6d1131a63e901dca71d1edce353d88b984f85583af36e5ca9b38e0b34728e&amp;source=constructor" width="100%" height="400"></iframe>
         </div>
       </div>
 
