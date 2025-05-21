@@ -79,7 +79,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center gap-4">
               <LiveSearch />
               <div className="text-right">
-                <p className="text-sm font-semibold text-white">+7 978 263‑95‑21</p>
+                <p className="text-sm font-semibold text-white">+7 978 782‑24‑79</p>
                 <p className="text-xs text-gray-200">Ежедневно 9:00 - 18:00</p>
               </div>
             </div>

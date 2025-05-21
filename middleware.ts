@@ -6,8 +6,16 @@ const allowedIPs = ['93.183.91.172', '91.210.178.134']; // ← замени на
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Проверка только для /admin и подстраниц
-  if (pathname.startsWith('/admin')) {
+  // Проверка для /admin, /create, /create1, /create2, /create3, /create4, /create5 и их подстраниц
+  if (
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/create') ||
+    pathname.startsWith('/create1') ||
+    pathname.startsWith('/create2') ||
+    pathname.startsWith('/create3') ||
+    pathname.startsWith('/create4') ||
+    pathname.startsWith('/create5')
+  ) {
     // Получаем IP из заголовка (работает на Vercel, с proxy и т.п.)
     const forwardedFor = request.headers.get('x-forwarded-for');
     const clientIP = forwardedFor?.split(',')[0].trim();
@@ -23,5 +31,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/create/:path*',
+    '/create1/:path*',
+    '/create2/:path*',
+    '/create3/:path*',
+    '/create4/:path*',
+    '/create5/:path*'
+  ],
 };
