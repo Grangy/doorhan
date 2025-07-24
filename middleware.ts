@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const allowedIPs = ['93.183.91.172', '91.210.178.134','147.45.210.105','147.45.210.104']; // ← замени на свои
+const allowedIPs = ['93.183.91.172', '91.210.178.134', '147.45.210.105', '147.45.210.104']; // ← замени на свои
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
