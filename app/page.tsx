@@ -24,7 +24,7 @@ export default async function Home() {
               </h1>
               <p className="text-lg text-gray-600 max-w-xl">
                 Исследуйте уникальные решения и инновационные подходы на рынке
-                автоматизации ворот.
+                автоматизации ворот
               </p>
               <Link href="/posts" passHref>
                 <button className="relative mt-4 inline-flex items-center px-8 py-4 overflow-hidden text-lg font-medium text-white transition-all duration-500 bg-gradient-to-r  bg-purple-600 to-sky-600 rounded-lg hover:bg-blue-700 group hover:scale-[1.02]">
