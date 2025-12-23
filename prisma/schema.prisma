@@ -1,73 +1,128 @@
-generator nextAdmin {
-  provider = "next-admin-generator-prisma"
-}
+// Временно отключен для ускорения генерации
+// generator nextAdmin {
+//   provider = "next-admin-generator-prisma"
+// }
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String?
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  name          String?
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          String    @default("user")
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model Posts {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int      @id @default(autoincrement())
   name        String?
-  slug        String?
+  slug        String?  @unique
   description String?
   image       String?
   category    String?
   posts2      Posts2[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Posts2 {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  id           Int               @id @default(autoincrement())
   name         String?
-  slug         String?
+  slug         String?           @unique
   description  String?
   content      String?
   metadata     String?
   specs        Json?
   image        String?
-  postId       String?       @db.ObjectId
-  post         Posts?        @relation(fields: [postId], references: [id])
+  postId       Int?
+  post         Posts?            @relation(fields: [postId], references: [id], onDelete: Cascade)
   sliderPhotos SliderPhotos[]
   colors       ColorPosts2[]
   pdfs         Pdf[]
-  advantages AdvantagePosts2[]
+  advantages   AdvantagePosts2[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 }
 
 model SliderPhotos {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int      @id @default(autoincrement())
   name      String?
   image     String
-  order     Int     @default(0)
-  posts2Id  String  @db.ObjectId
-  posts2    Posts2  @relation(fields: [posts2Id], references: [id])
+  order     Int      @default(0)
+  posts2Id  Int
+  posts2    Posts2   @relation(fields: [posts2Id], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([posts2Id])
 }
 
 model Color {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int           @id @default(autoincrement())
   name        String?
   image       String?
   category    String?
   description String?
   posts2      ColorPosts2[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model ColorPosts2 {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  color    Color   @relation(fields: [colorId], references: [id])
-  colorId  String  @db.ObjectId
-  posts2   Posts2  @relation(fields: [posts2Id], references: [id])
-  posts2Id String  @db.ObjectId
+  id       Int    @id @default(autoincrement())
+  color    Color  @relation(fields: [colorId], references: [id], onDelete: Cascade)
+  colorId  Int
+  posts2   Posts2 @relation(fields: [posts2Id], references: [id], onDelete: Cascade)
+  posts2Id Int
 
   @@unique([colorId, posts2Id])
   @@index([colorId])
@@ -75,40 +130,46 @@ model ColorPosts2 {
 }
 
 model Pdf {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  fileUrl  String
-  posts2Id String   @db.ObjectId
-  posts2   Posts2   @relation(fields: [posts2Id], references: [id])
+  id        Int      @id @default(autoincrement())
+  title     String
+  fileUrl   String
+  posts2Id  Int
+  posts2    Posts2   @relation(fields: [posts2Id], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([posts2Id])
 }
 
-// Новая модель для преимуществ
 model Advantage {
-  id              String              @id @default(auto()) @map("_id") @db.ObjectId
-  image           String
-  text            String
-  order           Int                 @default(0)
-  advantagePosts  AdvantagePosts2[]
+  id             Int               @id @default(autoincrement())
+  image          String
+  text           String
+  order          Int               @default(0)
+  advantagePosts AdvantagePosts2[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 }
 
 model AdvantagePosts2 {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  advantage  Advantage @relation(fields: [advantageId], references: [id])
-  advantageId String    @db.ObjectId
-  posts2     Posts2    @relation(fields: [posts2Id], references: [id])
-  posts2Id   String    @db.ObjectId
+  id          Int       @id @default(autoincrement())
+  advantage   Advantage @relation(fields: [advantageId], references: [id], onDelete: Cascade)
+  advantageId Int
+  posts2      Posts2    @relation(fields: [posts2Id], references: [id], onDelete: Cascade)
+  posts2Id    Int
 
   @@unique([advantageId, posts2Id])
+  @@index([advantageId])
+  @@index([posts2Id])
 }
 
 model Blog {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  slug         String   @unique
-  excerpt      String?
-  coverImage   String?  // ← Добавлено поле для картинки
-  content      String
-  publishedAt  DateTime @default(now())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  coverImage  String?
+  content     String
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

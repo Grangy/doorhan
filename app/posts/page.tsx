@@ -5,9 +5,19 @@ import Footer from "../components/Footer/Footer";
 import Image from "next/image";
 import Breadcrumbs from "../components/Breadcrumbs"; // импортируем компонент
 
+export const revalidate = 60; // ISR: обновлять каждые 60 секунд
+
 export default async function PostsPage() {
   // Получаем все посты из базы данных
-  const posts = await prisma.posts.findMany();
+  const posts = await prisma.posts.findMany({
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      description: true,
+      image: true,
+    },
+  });
 
   return (
     <>
@@ -44,18 +54,18 @@ export default async function PostsPage() {
 >
   {/* Обертка для изображения с адаптивностью */}
   {post.image ? (
-    <Link href={`/posts/${post.slug || post.id}`}>
-      <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
-        <Image
-          src={post.image || "/default-image.jpg"}
-          alt={post.name ?? "Default Post Name"}
-          fill
-          style={{ objectFit: "contain" }}
-          className="rounded-lg mb-4"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
-    </Link>
+    <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+      <Image
+        src={post.image ? (post.image.startsWith('/') ? post.image : `/${post.image}`) : "/default-image.jpg"}
+        alt={post.name ?? "Default Post Name"}
+        fill
+        style={{ objectFit: "contain" }}
+        className="rounded-lg mb-4"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority={false}
+        loading="lazy"
+      />
+    </div>
   ) : (
     <div className="w-full h-48 bg-gray-200 mb-4 rounded-lg flex items-center justify-center">
       <span className="text-gray-500">Нет изображения</span>

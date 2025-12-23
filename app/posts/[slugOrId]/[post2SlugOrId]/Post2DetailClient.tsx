@@ -349,7 +349,8 @@ const Post2DetailClient = forwardRef<HTMLDivElement, Props>(
     const [modalImage, setModalImage] = useState<ModalImageType | null>(null);
 
     const openModal = (imageUrl: string, alt: string) => {
-      setModalImage({ imageUrl, alt });
+      const normalizedUrl = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+      setModalImage({ imageUrl: normalizedUrl, alt });
     };
 
     const closeModal = () => {
@@ -373,7 +374,7 @@ const Post2DetailClient = forwardRef<HTMLDivElement, Props>(
                 className="relative mb-8 overflow-hidden rounded-2xl shadow-xl transition-shadow duration-300 h-[60vh] cursor-pointer"
               >
                 <Image
-                  src={post2.image}
+                  src={post2.image?.startsWith('/') ? post2.image : `/${post2.image}`}
                   alt={post2.name || "Изображение поста"}
                   fill
                   sizes="(max-width: 768px) 100vw, 80vw"

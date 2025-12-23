@@ -1,6 +1,7 @@
   // app/layout.tsx
   import type { Metadata } from 'next';
   import Script from 'next/script';
+  import { Providers } from './providers';
 
   import './globals.css';
 
@@ -45,7 +46,7 @@
         </Script>
       </head>
         <body className="min-h-screen">
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </html>
     );

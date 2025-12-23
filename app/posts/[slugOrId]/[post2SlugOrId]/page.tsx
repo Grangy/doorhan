@@ -10,16 +10,16 @@ type PageProps = {
   }>;
 };
 
-// Функция для проверки ObjectId (если нужно)
-function isValidObjectId(id: string) {
-  return /^[0-9a-fA-F]{24}$/.test(id);
+// Проверка, является ли строка числовым ID (для SQLite)
+function isNumericId(id: string): boolean {
+  return /^\d+$/.test(id);
 }
 
 // Функция generateMetadata для динамической генерации метаданных
 export async function generateMetadata({ params }: PageProps) {
   const { post2SlugOrId } = await params;
-  const whereCondition = isValidObjectId(post2SlugOrId)
-    ? { id: post2SlugOrId }
+  const whereCondition = isNumericId(post2SlugOrId)
+    ? { id: parseInt(post2SlugOrId) }
     : { slug: post2SlugOrId };
 
   // Получаем только необходимые поля для метаданных
@@ -47,8 +47,8 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function Post2DetailPage({ params }: PageProps) {
   const { post2SlugOrId } = await params;
 
-  const whereCondition = isValidObjectId(post2SlugOrId)
-    ? { id: post2SlugOrId }
+  const whereCondition = isNumericId(post2SlugOrId)
+    ? { id: parseInt(post2SlugOrId) }
     : { slug: post2SlugOrId };
 
   const post2 = await prisma.posts2.findFirst({
@@ -73,16 +73,44 @@ export default async function Post2DetailPage({ params }: PageProps) {
   const advantages = post2.advantages.map((ap) => ap.advantage);
 
   const formattedPost2: Post2Type = {
-    id: post2.id,
+    id: post2.id.toString(),
     name: post2.name,
     image: post2.image,
     description: post2.description,
     specs: specs,
-    colors: post2.colors || [],
-    sliderPhotos: post2.sliderPhotos || [],
-    pdfs: post2.pdfs || [],
-    post: post2.post || undefined,
-    advantages: advantages,
+    colors: (post2.colors || []).map(c => ({
+      color: {
+        id: c.color.id.toString(),
+        name: c.color.name,
+        image: c.color.image,
+      }
+    })),
+    sliderPhotos: (post2.sliderPhotos || []).map(sp => ({
+      id: sp.id.toString(),
+      image: sp.image,
+      name: sp.name,
+      order: sp.order,
+      posts2Id: sp.posts2Id.toString(),
+    })),
+    pdfs: (post2.pdfs || []).map(pdf => ({
+      id: pdf.id.toString(),
+      fileUrl: pdf.fileUrl,
+      title: pdf.title,
+    })),
+    post: post2.post ? {
+      id: post2.post.id.toString(),
+      name: post2.post.name,
+      slug: post2.post.slug,
+      description: post2.post.description,
+      image: post2.post.image,
+      category: post2.post.category,
+    } : undefined,
+    advantages: advantages.map(a => ({
+      id: a.id.toString(),
+      image: a.image,
+      text: a.text,
+      order: a.order,
+    })),
   };
 
   return <Post2DetailClient post2={formattedPost2} />;

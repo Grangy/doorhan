@@ -35,14 +35,14 @@ export async function POST(request: Request) {
     const advantages = (await request.json()) as AdvantageInput[];
     const createdAdvantages = await Promise.all(
       advantages.map(async (adv) => {
-        const created = await prisma.advantage.create({
+        const createdAdvantage = await prisma.advantage.create({
           data: {
             image: adv.image,
             text: adv.text,
             order: Number(adv.order),
             advantagePosts: {
               create: adv.posts2Ids.map((pid) => ({
-                posts2: { connect: { id: pid } },
+                posts2: { connect: { id: parseInt(pid) } },
               })),
             },
           },
@@ -53,8 +53,8 @@ export async function POST(request: Request) {
           },
         });
         return {
-          ...created,
-          posts2Ids: created.advantagePosts.map((ap) => ap.posts2Id),
+          ...createdAdvantage,
+          posts2Ids: createdAdvantage.advantagePosts.map((ap) => ap.posts2Id),
         };
       })
     );
@@ -95,7 +95,7 @@ export async function PATCH(request: Request) {
       data: {
         advantagePosts: {
           create: posts2Ids.map((pid: string) => ({
-            posts2: { connect: { id: pid } },
+            posts2: { connect: { id: parseInt(pid) } },
           })),
         },
       },

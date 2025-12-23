@@ -66,7 +66,7 @@ export default async function Home() {
 
         {/* Сетка постов */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 pb-16">
-          {posts.map((post) => (
+          {posts.map((post: { id: number; slug: string | null; name: string | null; image: string | null }) => (
             <Link
               key={post.id}
               href={`/posts/${post.slug || post.id}`}
@@ -76,7 +76,7 @@ export default async function Home() {
                 {post.image && (
                   <div className="relative w-full pb-[56.25%]">
                     <Image
-                      src={post.image}
+                      src={post.image.startsWith('/') ? post.image : `/${post.image}`}
                       alt={post.name || "Пост"}
                       fill
                       className="object-fit transition-transform duration-300 group-hover:scale-105"

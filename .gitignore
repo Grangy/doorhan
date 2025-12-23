@@ -39,4 +39,62 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# video files
 /public/video/video.mp4
+
+# prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/*.db
+/prisma/*.db-journal
+
+# build artifacts
+/.next
+/out
+/build
+/dist
+
+# cache
+.cache
+.parcel-cache
+.eslintcache
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# temp
+*.tmp
+*.temp
+
+# data files (large)
+/data/import/
+!/data/import/.gitkeep
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+/public/pdf/*.pdf
+
+# production
+/.env.production
+/.env.local
+/.env*.local
+
+# deployment scripts with sensitive data (use environment variables)
+# Keep scripts but remove hardcoded passwords

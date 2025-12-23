@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   });
 
   return new Promise<Response>((resolve, reject) => {
-    form.parse(mockReq, (err, fields, files) => {
+    form.parse(mockReq, (err, _fields, files) => {
       if (err) {
         return reject(
           new Response(JSON.stringify({ error: err.message }), { status: 500 })

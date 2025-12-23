@@ -3,7 +3,7 @@ import path from "path";
 import { Readable } from "stream";
 import type { IncomingMessage } from "http";
 import fs from "fs";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../prisma";
 
 export const config = {
@@ -20,15 +20,15 @@ function bufferToStream(buffer: Buffer) {
 }
 
 // GET: Получаем все PDF, привязанные к конкретному posts2Id
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
   const posts2Id = searchParams.get("posts2Id");
   if (!posts2Id) {
     return NextResponse.json({ error: "posts2Id is required" }, { status: 400 });
   }
   try {
     const pdfs = await prisma.pdf.findMany({
-      where: { posts2Id },
+      where: { posts2Id: parseInt(posts2Id) },
     });
     return NextResponse.json(pdfs);
   } catch (error: unknown) {
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
           data: {
             title: title.toString(),
             fileUrl: fileUrl,
-            posts2Id: posts2Id.toString(),
+            posts2Id: parseInt(posts2Id.toString()),
           },
         });
 
@@ -134,7 +134,7 @@ export async function DELETE(request: Request) {
     }
 
     const pdfRecord = await prisma.pdf.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     if (!pdfRecord) {
@@ -145,7 +145,7 @@ export async function DELETE(request: Request) {
     await fs.promises.unlink(filePath);
 
     await prisma.pdf.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     return new Response(

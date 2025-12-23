@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from "../../../prisma";
 
 // GET: Фильтрация по posts2Id (если передан) для получения только нужных привязок
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const posts2Id = searchParams.get("posts2Id");
 
     let colorPosts;
     if (posts2Id) {
       colorPosts = await prisma.colorPosts2.findMany({
-        where: { posts2Id },
+        where: { posts2Id: parseInt(posts2Id) },
         include: { color: true, posts2: true },
       });
     } else {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const { colorId, posts2Id } = body;
 
     const colorPost = await prisma.colorPosts2.create({
-      data: { colorId, posts2Id },
+      data: { colorId: parseInt(colorId), posts2Id: parseInt(posts2Id) },
     });
     return NextResponse.json(colorPost, { status: 201 });
   } catch (error) {
@@ -48,8 +48,8 @@ export async function PUT(request: Request) {
     const { id, colorId, posts2Id } = body;
 
     const colorPost = await prisma.colorPosts2.update({
-      where: { id },
-      data: { colorId, posts2Id },
+      where: { id: parseInt(id) },
+      data: { colorId: parseInt(colorId), posts2Id: parseInt(posts2Id) },
     });
     return NextResponse.json(colorPost);
   } catch (error) {
@@ -59,16 +59,16 @@ export async function PUT(request: Request) {
 }
 
 // DELETE: Отвязка одного цвета или всех (при наличии detachAll)
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const detachAll = searchParams.get("detachAll");
     const posts2Id = searchParams.get("posts2Id");
 
     // Если detachAll=true, удаляем все привязки для заданного posts2Id
     if (detachAll === "true" && posts2Id) {
       const deleted = await prisma.colorPosts2.deleteMany({
-        where: { posts2Id },
+        where: { posts2Id: parseInt(posts2Id) },
       });
       return new Response(JSON.stringify(deleted), { status: 200 });
     }
@@ -80,7 +80,7 @@ export async function DELETE(request: Request) {
 
     const deleted = await prisma.colorPosts2.delete({
       where: {
-        colorId_posts2Id: { colorId, posts2Id },
+        colorId_posts2Id: { colorId: parseInt(colorId), posts2Id: parseInt(posts2Id) },
       },
     });
     return new Response(JSON.stringify(deleted), { status: 200 });

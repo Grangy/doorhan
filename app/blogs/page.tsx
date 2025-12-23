@@ -16,10 +16,11 @@ type BlogItem = {
   };  
 
 export default async function BlogsPage() {
-  const posts: BlogItem[] = await prisma.blog.findMany({
+  const postsData = await prisma.blog.findMany({
     orderBy: { publishedAt: 'desc' },
     select: { id: true, title: true, slug: true, excerpt: true, publishedAt: true }
   });
+  const posts: BlogItem[] = postsData.map(post => ({ ...post, id: post.id.toString() }));
 
   return (
     <>

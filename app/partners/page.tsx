@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import Image from 'next/image';
 import {
   FiPenTool,
@@ -20,7 +20,7 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import FeedbackForm from "../components/FeedbackForm/FeedbackForm"; // Импорт компонента PopUp с формой
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -30,12 +30,12 @@ const containerVariants = {
   }
 };
 
-const tileVariants = {
+const tileVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] }
   }
 };
 

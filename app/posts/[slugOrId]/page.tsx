@@ -7,8 +7,9 @@ import Footer from "../../components/Footer/Footer";
 import Breadcrumbs from "../../components/Breadcrumbs"; // импортируем
 import ContactForm from "../../components/ContactForm";
 
-function isValidObjectId(id: string) {
-  return /^[0-9a-fA-F]{24}$/.test(id);
+// Проверка, является ли строка числовым ID (для SQLite)
+function isNumericId(id: string): boolean {
+  return /^\d+$/.test(id);
 }
 
 type tParams = Promise<{ slugOrId: string }>;
@@ -17,8 +18,8 @@ export async function generateMetadata({ params }: { params: tParams }) {
   const { slugOrId } = await params; // Ожидаем данных из params как промис
 
   try {
-    const whereCondition = isValidObjectId(slugOrId)
-      ? { id: slugOrId }
+    const whereCondition = isNumericId(slugOrId)
+      ? { id: parseInt(slugOrId) }
       : { slug: slugOrId };
 
     const post = await prisma.posts.findFirst({
@@ -45,8 +46,8 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
   const { slugOrId } = await params; // Ожидаем данные из params как промис
 
   try {
-    const whereCondition = isValidObjectId(slugOrId)
-      ? { id: slugOrId }
+    const whereCondition = isNumericId(slugOrId)
+      ? { id: parseInt(slugOrId) }
       : { slug: slugOrId };
 
     const post = await prisma.posts.findFirst({
@@ -66,7 +67,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
             {post.image && (
               <div className="relative mb-8 overflow-hidden rounded-2xl shadow-xl transition-shadow duration-300 h-[60vh] cursor-pointer">
                 <Image
-                  src={`${post.image}?t=${Date.now()}`}
+                  src={`${post.image.startsWith('/') ? post.image : `/${post.image}`}?t=${Date.now()}`}
                   alt={post.name || "Изображение поста"}
                   fill
                   className="object-contain"
@@ -108,7 +109,7 @@ export default async function PostDetailPage({ params }: { params: tParams }) {
                         >
                           <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
                             <Image
-                              src={`${post2.image}?t=${Date.now()}`}
+                              src={`${post2.image?.startsWith('/') ? post2.image : `/${post2.image}`}?t=${Date.now()}`}
                               alt={post2.name || "Изображение связанного поста"}
                               fill
                               className="object-contain"
